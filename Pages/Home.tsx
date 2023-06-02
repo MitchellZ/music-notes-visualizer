@@ -53,6 +53,77 @@ const Home = () => {
       });
   }, []);
 
+  const [frequencyData, setFrequencyData] = useState<Uint8Array | null>(null);
+  const [previousLoudestFrequency, setPreviousLoudestFrequency] = useState<number | null>(null);
+
+  useEffect(() => {
+    let audioContext: AudioContext | null = null;
+    let sourceNode: MediaStreamAudioSourceNode | null = null;
+    let analyserNode: AnalyserNode | null = null;
+    let scriptNode: ScriptProcessorNode | null = null;
+
+    // Request access to the microphone
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => {
+        // Create an AudioContext
+        audioContext = new AudioContext();
+
+        // Create a MediaStreamAudioSourceNode
+        sourceNode = audioContext.createMediaStreamSource(stream);
+
+        // Create a ScriptProcessorNode
+        scriptNode = audioContext.createScriptProcessor(4096, 1, 1);
+
+        // Create an AnalyserNode
+        analyserNode = audioContext.createAnalyser();
+        analyserNode.fftSize = 2048;
+
+        // Connect the nodes
+        sourceNode.connect(analyserNode);
+        analyserNode.connect(scriptNode);
+        scriptNode.connect(audioContext.destination);
+
+        // Event handler for audio processing
+        scriptNode.onaudioprocess = () => {
+          // Get the frequency data
+          const bufferLength = analyserNode.frequencyBinCount;
+          const dataArray = new Uint8Array(bufferLength);
+          analyserNode.getByteFrequencyData(dataArray);
+
+          // Find the index of the loudest value
+          let loudestIndex = 0;
+          let loudestValue = dataArray[0];
+          for (let i = 1; i < bufferLength; i++) {
+            if (dataArray[i] > loudestValue) {
+              loudestValue = dataArray[i];
+              loudestIndex = i;
+            }
+          }
+
+          // Convert the index to frequency in Hz
+          const sampleRate = audioContext.sampleRate;
+          const nyquistFrequency = sampleRate / 2;
+          const frequencyResolution = nyquistFrequency / bufferLength;
+          const loudestFrequency = frequencyResolution * loudestIndex;
+
+          // Round the loudest frequency to two decimal places
+          const roundedLoudestFrequency = Math.round(loudestFrequency * 100) / 100;
+
+          // Print the loudest frequency to the console
+          if (roundedLoudestFrequency !== previousLoudestFrequency && roundedLoudestFrequency !== 0) {
+            console.log(`Loudest frequency: ${roundedLoudestFrequency.toFixed(2)} Hz`);
+            setPreviousLoudestFrequency(roundedLoudestFrequency);
+          }
+
+          // Update the frequency data state
+          setFrequencyData(dataArray);
+        };
+      })
+      .catch((error) => {
+        console.error('Error accessing microphone:', error);
+      });
+    }, []);
+
   // Begin HTML Template
   return (
     <div id="container">

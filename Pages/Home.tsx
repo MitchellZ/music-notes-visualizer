@@ -299,7 +299,7 @@ const Home = () => {
         <ul>
           <li>
             <a className="active" href="/">
-              TRIVIA GENERATOR
+              NOTES VISUALIZER
             </a>
           </li>
           <li className="about">
@@ -309,134 +309,14 @@ const Home = () => {
       </div>
       <div className="main_body">
         <div className="welcome">
-          <h1>Welcome to Trivia Generator!</h1>
+          <h1>Music Notes Visualizer</h1>
         </div>
-        <section className="parameters_form">
-          <p>Enter your parameters below</p>
-          <br />
-          <label>Number of Questions</label>
-          <br />
-          <div className="input_item">
-            <input
-              onChange={updateAmount}
-              type="number"
-              min="1"
-              max="50"
-              value={number}
-            />
-            <p id="form_error" style={{ display: 'none' }}>
-              Must be between 1-50.
-            </p>
-          </div>
-          <br />
-          <label>Category</label>
-          <br />
-          <div className="input_item">
-            <select onChange={updateCategory}>
-              <option>Any Category</option>
-              <option>General Knowledge</option>
-              <option>Entertainment: Books</option>
-              <option>Entertainment: Film</option>
-              <option>Entertainment: Music</option>
-              <option>Entertainment: Musicals & Theatres</option>
-              <option>Entertainment: Television</option>
-              <option>Entertainment: Video Games</option>
-              <option>Entertainment: Board Games</option>
-              <option>Science & Nature</option>
-              <option>Science: Computers</option>
-              <option>Science: Mathematics</option>
-              <option>Mythology</option>
-              <option>Sports</option>
-              <option>Geography</option>
-              <option>History</option>
-              <option>Politics</option>
-              <option>Art</option>
-              <option>Celebrities</option>
-              <option>Animals</option>
-              <option>Vehicles</option>
-              <option>Entertainment: Comics</option>
-              <option>Science: Gadgets</option>
-              <option>Entertainment: Japanese Anime & Manga</option>
-              <option>Entertainment: Cartoon & Animations</option>
-            </select>
-          </div>
-          <br />
-          <label>Difficulty</label>
-          <br />
-          <div className="input_item">
-            <select onChange={updateDifficulty}>
-              <option>Any Difficulty</option>
-              <option>Easy</option>
-              <option>Medium</option>
-              <option>Hard</option>
-            </select>
-          </div>
-          <br />
-          <label>Type</label>
-          <br />
-          <div className="input_item">
-            <select defaultValue="Multiple Choice" onChange={updateType}>
-              <option>Any Type</option>
-              <option>Multiple Choice</option>
-              <option>True/False</option>
-            </select>
-          </div>
-          <br />
-          <button type="button" onClick={generateHandle}>
-            Generate
-          </button>
-        </section>
         <br />
-        <section
-          className="slides"
-          onClick={changeSlides}
-          style={{ display: 'none' }}
-        >
-          <div className="slide" style={{ display: 'none' }}>
-            <p id="slideText">TRIVIA</p>
-          </div>
-          {showPosts}
-          <p id="fullscreen">
-            <span className="material-symbols-outlined" onClick={goFullscreen}>
-              fullscreen
-            </span>
-          </p>
-        </section>
-
-        <section className="noResults" style={{ display: 'none' }}>
-          <br />
-          <p style={{ color: 'red' }}>
-            Failed! Not enough questions to fulfill parameters.
-          </p>
-          <p>Please modify your parameters and try again.</p>
-        </section>
-
-        <section className="answerKey">
-          <div className="keyDisplay">
-            <label className="keyLabel" style={{ display: 'none' }}>
-              Answer Key
-            </label>
-            <br />
-            <div className="keyLink" style={{ display: 'none' }}>
-              <input
-                id="linkText"
-                type="text"
-                value={answerKeyLink}
-                onClick={openLink}
-                readOnly
-              />{' '}
-              <div id="copyButton" onClick={copyLink}>
-                <span className="material-symbols-outlined">content_copy</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <div id="spacer"></div>
-      </div>
+        </div>
       <footer>
         <ul>
-          <li className="title">Trivia Generator developed by Mitchell Zoph</li>
+          <li className="title">Music Notes Visualizer developed by Mitchell Zoph</li>
         </ul>
       </footer>
     </div>

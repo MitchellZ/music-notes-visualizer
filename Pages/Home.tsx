@@ -60,6 +60,7 @@ const Home = () => {
   const [frequencyValue, setFrequencyValue] = useState<number | null>(null);
   const [MIDIValue, setMIDIValue] = useState<number | null>(null);
   const [noteName, setNoteName] = useState<string | null>(null);
+  const [clarity, setClarity] = useState<number | null>(null);
 
   // Function to indentify pitch frequency
   useEffect(() => {
@@ -106,6 +107,9 @@ const Home = () => {
           // Perform pitch detection
           const sampleRate = audioContext.sampleRate;
           const [detectedPitch, detectedClarity] = detector.findPitch(resizedArray, sampleRate);
+
+          // Set clarity
+          setClarity(detectedClarity);
 
           // Get the pitch value
           const pitchValue = detectedPitch;
@@ -181,6 +185,8 @@ const Home = () => {
           MIDI#: {MIDIValue}
           <br/>
           Note Name: {noteName}
+          <br/><br/>
+          Confidence: {Math.round(clarity * 100)}%
         </p>
         <div id="spacer"></div>
         </div>

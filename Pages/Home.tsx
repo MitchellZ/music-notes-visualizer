@@ -57,6 +57,7 @@ const Home = () => {
   const [previousLoudestFrequency, setPreviousLoudestFrequency] = useState<number | null>(null);
   const [frequencyValue, setFrequencyValue] = useState<number | null>(null);
   const [MIDIValue, setMIDIValue] = useState<number | null>(null);
+  const [noteName, setNoteName] = useState<string | null>(null);
 
   useEffect(() => {
     let audioContext: AudioContext | null = null;
@@ -121,6 +122,10 @@ const Home = () => {
 
             setMIDIValue(Math.round(MIDINum));
 
+            let noteName = getNoteName(Math.round(MIDINum))
+
+            setNoteName(noteName);
+
           }
 
           // Update the frequency data state
@@ -131,6 +136,19 @@ const Home = () => {
         console.error('Error accessing microphone:', error);
       });
     }, []);
+
+  // Function to get the name of a note from the MIDI#
+  function getNoteName(midiNote) {
+    var notes = [
+      "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+    ];
+    
+    var octave = Math.floor(midiNote / 12) - 1;
+    var noteIndex = midiNote % 12;
+    
+    var noteName = notes[noteIndex] + octave;
+    return noteName;
+  }
 
   // Begin HTML Template
   return (
@@ -162,6 +180,8 @@ const Home = () => {
           {frequencyValue} Hz
           <br/>
           MIDI#: {MIDIValue}
+          <br/>
+          Note Name: {noteName}
         </p>
         <div id="spacer"></div>
         </div>

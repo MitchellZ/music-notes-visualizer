@@ -1,3 +1,3 @@
 # Music Notes Visualizer
 
-See it in action at https://react-trivia-generator-jyh9jq.stackblitz.io.
+See it in action at https://music-notes-visualizer.stackblitz.io.

@@ -2,11 +2,13 @@ import * as React from 'react';
 import '../style.css';
 
 import { useEffect, useState } from 'react';
+import { PitchDetector } from 'pitchy';
 
 // Defining the Home component
 const Home = () => {
   const [peakValue, setPeakValue] = useState<number>(0);
 
+  // Function to indentify peak volume
   useEffect(() => {
     // Request access to the microphone
     navigator.mediaDevices.getUserMedia({ audio: true })
@@ -54,11 +56,12 @@ const Home = () => {
   }, []);
 
   const [frequencyData, setFrequencyData] = useState<Uint8Array | null>(null);
-  const [previousLoudestFrequency, setPreviousLoudestFrequency] = useState<number | null>(null);
+  const [previousRoundedPitch, setPreviousRoundedPitch] = useState<number | null>(null);
   const [frequencyValue, setFrequencyValue] = useState<number | null>(null);
   const [MIDIValue, setMIDIValue] = useState<number | null>(null);
   const [noteName, setNoteName] = useState<string | null>(null);
 
+  // Function to indentify pitch frequency
   useEffect(() => {
     let audioContext: AudioContext | null = null;
     let sourceNode: MediaStreamAudioSourceNode | null = null;
@@ -86,39 +89,37 @@ const Home = () => {
         analyserNode.connect(scriptNode);
         scriptNode.connect(audioContext.destination);
 
+        // Create a pitch detector
+        let detector = PitchDetector.forFloat32Array(2048);
+
         // Event handler for audio processing
         scriptNode.onaudioprocess = () => {
           // Get the frequency data
           const bufferLength = analyserNode.frequencyBinCount;
-          const dataArray = new Uint8Array(bufferLength);
-          analyserNode.getByteFrequencyData(dataArray);
+          const dataArray = new Float32Array(bufferLength);
+          analyserNode.getFloatTimeDomainData(dataArray);
 
-          // Find the index of the loudest value
-          let loudestIndex = 0;
-          let loudestValue = dataArray[0];
-          for (let i = 1; i < bufferLength; i++) {
-            if (dataArray[i] > loudestValue) {
-              loudestValue = dataArray[i];
-              loudestIndex = i;
-            }
-          }
+          // Resize the dataArray to 2048
+          const resizedArray = new Float32Array(2048);
+          resizedArray.set(dataArray.slice(0, 2048));
 
-          // Convert the index to frequency in Hz
+          // Perform pitch detection
           const sampleRate = audioContext.sampleRate;
-          const nyquistFrequency = sampleRate / 2;
-          const frequencyResolution = nyquistFrequency / bufferLength;
-          const loudestFrequency = frequencyResolution * loudestIndex;
+          const [detectedPitch, detectedClarity] = detector.findPitch(resizedArray, sampleRate);
+
+          // Get the pitch value
+          const pitchValue = detectedPitch;
 
           // Round the loudest frequency to two decimal places
-          const roundedLoudestFrequency = Math.round(loudestFrequency * 100) / 100;
+          const roundedPitch = Math.round(pitchValue * 100) / 100;
 
-          // Print the loudest frequency to the console
-          if (roundedLoudestFrequency !== previousLoudestFrequency && roundedLoudestFrequency !== 0) {
-            //console.log(`Loudest frequency: ${roundedLoudestFrequency.toFixed(2)} Hz`);
-            setPreviousLoudestFrequency(roundedLoudestFrequency);
-            setFrequencyValue(roundedLoudestFrequency);
+          // Print the detected pitch to the console
+          if (roundedPitch !== previousRoundedPitch && roundedPitch !== 0) {
+            //console.log(`Pitch: ${roundedPitch.toFixed(2)} Hz`);
+            setPreviousRoundedPitch(roundedPitch);
+            setFrequencyValue(roundedPitch);
 
-            let MIDINum = 69 + 12 * Math.log2(loudestFrequency / 440);
+            let MIDINum = 69 + 12 * Math.log2(pitchValue / 440);
 
             setMIDIValue(Math.round(MIDINum));
 
@@ -128,8 +129,6 @@ const Home = () => {
 
           }
 
-          // Update the frequency data state
-          setFrequencyData(dataArray);
         };
       })
       .catch((error) => {

@@ -55,6 +55,8 @@ const Home = () => {
 
   const [frequencyData, setFrequencyData] = useState<Uint8Array | null>(null);
   const [previousLoudestFrequency, setPreviousLoudestFrequency] = useState<number | null>(null);
+  const [frequencyValue, setFrequencyValue] = useState<number | null>(null);
+  const [MIDIValue, setMIDIValue] = useState<number | null>(null);
 
   useEffect(() => {
     let audioContext: AudioContext | null = null;
@@ -111,8 +113,14 @@ const Home = () => {
 
           // Print the loudest frequency to the console
           if (roundedLoudestFrequency !== previousLoudestFrequency && roundedLoudestFrequency !== 0) {
-            console.log(`Loudest frequency: ${roundedLoudestFrequency.toFixed(2)} Hz`);
+            //console.log(`Loudest frequency: ${roundedLoudestFrequency.toFixed(2)} Hz`);
             setPreviousLoudestFrequency(roundedLoudestFrequency);
+            setFrequencyValue(roundedLoudestFrequency);
+
+            let MIDINum = 69 + 12 * Math.log2(loudestFrequency / 440);
+
+            setMIDIValue(Math.round(MIDINum));
+
           }
 
           // Update the frequency data state
@@ -148,7 +156,13 @@ const Home = () => {
           <h1>Music Notes Visualizer</h1>
         </div>
         <br />
-        {peakValue} dB
+        <p className="parameters_form">
+          {peakValue} dB
+          <br/>
+          {frequencyValue} Hz
+          <br/>
+          MIDI#: {MIDIValue}
+        </p>
         <div id="spacer"></div>
         </div>
       <footer>

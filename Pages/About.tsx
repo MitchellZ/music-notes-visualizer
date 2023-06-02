@@ -11,7 +11,7 @@ const About = () => {
       <div>
         <div className="nav">
           <ul>
-          <li><Link to = "/" className="active">Notes Visualizer</Link></li>
+          <li><Link to = "/" className="active">NOTES VISUALIZER</Link></li>
           <li className="about"><Link to = "/About" className="active">About</Link></li>
           </ul>
         </div>

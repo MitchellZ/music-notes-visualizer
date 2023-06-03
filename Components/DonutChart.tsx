@@ -15,7 +15,7 @@ const DonutChart = () => {
       bold: true,
       fontSize: 24
     },
-    chartArea: { width: '90%', height: '90%' },
+    chartArea: { width: '100%', height: '100%' },
     enableInteractivity: false,
     legend: 'none',
     pieStartAngle: -15

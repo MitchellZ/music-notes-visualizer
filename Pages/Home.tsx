@@ -176,13 +176,12 @@ const Home = () => {
       </div>
       <div className="main_body">
         <div className="welcome">
-          <h1>Music Notes Visualizer</h1>
         </div>
-        <br />
         <DonutChart />
-        <br/>
+        <br/> <br/>
         <p className="parameters_form">
           <h3>Tuner Information</h3>
+          <p>
           <br/>
           {peakValue} dB
           <br/>
@@ -193,6 +192,7 @@ const Home = () => {
           Note Name: {noteName}
           <br/><br/>
           Confidence: {Math.round(clarity * 100)}%
+          </p>
         </p>
         <div id="spacer"></div>
         </div>

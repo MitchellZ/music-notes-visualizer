@@ -70,7 +70,7 @@ p {
 }
 
 .welcome {
-  padding: 128px 24px 28px 24px;
+  padding: 80px 24px 28px 24px;
   text-align: center;
   display: block;
   margin-left: auto;
@@ -174,9 +174,9 @@ p {
 }
 
 .parameters_form p {
-  font-size: larger;
-  font-weight: bold;
-  color: #0d6583;
+  font-size: medium;
+  font-weight: regular;
+  color: black3;
 }
 
 label {

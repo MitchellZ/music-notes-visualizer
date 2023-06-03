@@ -1,7 +1,14 @@
 import * as React from 'react';
+import { useContext } from 'react';
 import { Chart } from 'react-google-charts';
 
+import NoteContext from '../Contexts/NoteContext';
+
 const DonutChart = () => {
+  const { noteName, setNoteName } = useContext(NoteContext);
+
+  console.log('Note: ' + noteName);
+
   const handleChartReady = (chartWrapper) => {
     chartWrapper.getChart().setSelection([{ row: 0 }]);
   };

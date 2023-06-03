@@ -1,6 +1,7 @@
 import * as React from 'react';
 import '../style.css';
 
+import NoteContext from '../Contexts/NoteContext';
 import DonutChart from '../Components/DonutChart';
 
 import { useEffect, useState } from 'react';
@@ -177,9 +178,11 @@ const Home = () => {
       <div className="main_body">
         <div className="welcome">
         </div>
+        <NoteContext.Provider value={{ noteName, setNoteName }}>
         <DonutChart />
+        </NoteContext.Provider>
         <br/> <br/>
-        <p className="parameters_form">
+        <div className="parameters_form">
           <h3>Tuner Information</h3>
           <p>
           <br/>
@@ -193,7 +196,7 @@ const Home = () => {
           <br/><br/>
           Confidence: {Math.round(clarity * 100)}%
           </p>
-        </p>
+        </div>
         <div id="spacer"></div>
         </div>
       <footer>

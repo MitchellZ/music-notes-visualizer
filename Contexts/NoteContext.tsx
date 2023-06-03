@@ -2,12 +2,14 @@ import * as React from 'react';
 
 type NoteContextType = {
   noteName: string | null;
-  setNoteName: (name: string | null) => void;
+  clarity: number | null;
+  peakValue: number | null;
 };
 
 const NoteContext = React.createContext<NoteContextType>({
   noteName: null,
-  setNoteName: () => {},
+  clarity: null,
+  peakValue: null,
 });
 
 export default NoteContext;

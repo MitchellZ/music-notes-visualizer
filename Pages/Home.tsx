@@ -178,7 +178,7 @@ const Home = () => {
       <div className="main_body">
         <div className="welcome">
         </div>
-        <NoteContext.Provider value={{ noteName, setNoteName }}>
+        <NoteContext.Provider value={{ noteName, clarity, peakValue }}>
         <DonutChart />
         </NoteContext.Provider>
         <br/> <br/>

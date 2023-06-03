@@ -5,9 +5,9 @@ import { Chart } from 'react-google-charts';
 import NoteContext from '../Contexts/NoteContext';
 
 const DonutChart = () => {
-  const { noteName, setNoteName } = useContext(NoteContext);
+  const { noteName, clarity, peakValue } = useContext(NoteContext);
 
-  //console.log('Note: ' + noteName);
+  //console.log('Peak ' + peakValue);
 
   const handleChartReady = (chartWrapper) => {
     //HandleChartReady must be defined
@@ -44,15 +44,20 @@ const DonutChart = () => {
     ['B', 8.33]
   ];
 
-  let highlightedNote = ''
+  let highlightedNote = '';
+if (noteName != null) {
+  highlightedNote = noteName.substring(0, noteName.length - 1);
+}
 
-  if (noteName != null)
-    highlightedNote = noteName.substring(0, noteName.length - 1);
+const highlightedNoteIndex = chartData.findIndex((noteData) => noteData[0] === highlightedNote);
+if (highlightedNoteIndex !== -1) {
+  if (peakValue >= 1.5 && clarity >= 0.9) {
+    chartOptions.colors[highlightedNoteIndex - 1] = 'SteelBlue';
+  } else {
+    chartOptions.colors[highlightedNoteIndex - 1] = 'lightblue';
+  }
+}
 
-    const highlightedNoteIndex = chartData.findIndex((noteData) => noteData[0] === highlightedNote);
-    if (highlightedNoteIndex !== -1) {
-      chartOptions.colors[highlightedNoteIndex -1] = 'SteelBlue';
-    }
 
   return (
     <Chart

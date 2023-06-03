@@ -7,22 +7,22 @@ import NoteContext from '../Contexts/NoteContext';
 const DonutChart = () => {
   const { noteName, setNoteName } = useContext(NoteContext);
 
-  console.log('Note: ' + noteName);
+  //console.log('Note: ' + noteName);
 
   const handleChartReady = (chartWrapper) => {
-    chartWrapper.getChart().setSelection([{ row: 0 }]);
+    //HandleChartReady must be defined
   };
 
   const chartOptions = {
     pieHole: 0.45,
     pieSliceText: 'label',
-    colors: ['lightblue'],
+    colors: ['lightblue', 'lightblue', 'lightblue', 'lightblue', 'lightblue', 'lightblue', 'lightblue', 'lightblue', 'lightblue', 'lightblue', 'lightblue', 'lightblue'],
     pieSliceTextStyle: {
       color: 'white',
       bold: true,
       fontSize: 24
     },
-    chartArea: { width: '100%', height: '100%' },
+    chartArea: { width: '97%', height: '97%' },
     enableInteractivity: false,
     legend: 'none',
     pieStartAngle: -15
@@ -43,6 +43,16 @@ const DonutChart = () => {
     ['A#', 8.33],
     ['B', 8.33]
   ];
+
+  let highlightedNote = ''
+
+  if (noteName != null)
+    highlightedNote = noteName.substring(0, noteName.length - 1);
+
+    const highlightedNoteIndex = chartData.findIndex((noteData) => noteData[0] === highlightedNote);
+    if (highlightedNoteIndex !== -1) {
+      chartOptions.colors[highlightedNoteIndex -1] = 'SteelBlue';
+    }
 
   return (
     <Chart

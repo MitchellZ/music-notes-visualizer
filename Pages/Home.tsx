@@ -13,45 +13,45 @@ const Home = () => {
 
   // Function to indentify peak volume
   useEffect(() => {
+    let audioContext: AudioContext | null = null;
+    let analyserNode: AnalyserNode | null = null;
+
     // Request access to the microphone
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then((stream) => {
         // Create an AudioContext
-        const audioContext = new AudioContext();
+        audioContext = new AudioContext();
 
-        // Create a MediaStreamAudioSourceNode
-        const sourceNode = audioContext.createMediaStreamSource(stream);
+        // Create an AnalyserNode
+        analyserNode = audioContext.createAnalyser();
+        analyserNode.fftSize = 2048;
 
-        // Create a ScriptProcessorNode
-        const scriptNode = audioContext.createScriptProcessor(4096, 1, 1);
+        // Connect the microphone stream to the AnalyserNode
+        const microphone = audioContext.createMediaStreamSource(stream);
+        microphone.connect(analyserNode);
 
-        // Connect the nodes
-        sourceNode.connect(scriptNode);
-        scriptNode.connect(audioContext.destination);
+        // Function to update the peak value
+        const updatePeakValue = () => {
+          const bufferLength = analyserNode.frequencyBinCount;
+          const dataArray = new Uint8Array(bufferLength);
+          analyserNode.getByteTimeDomainData(dataArray);
 
-        // Event handler for audio processing
-        scriptNode.onaudioprocess = (event) => {
-          // Get the input buffer
-          const inputBuffer = event.inputBuffer;
-
-          // Get the channel data
-          const channelData = inputBuffer.getChannelData(0);
-
-          // Find the peak value
-          let newPeakValue = 0;
-          for (let i = 0; i < channelData.length; i++) {
-            const value = Math.abs(channelData[i]);
-            if (value > newPeakValue) {
-              newPeakValue = value;
+          let peakValue = 0;
+          for (let i = 0; i < bufferLength; i++) {
+            const amplitude = Math.abs((dataArray[i] / 128) - 1);
+            if (amplitude > peakValue) {
+              peakValue = amplitude;
             }
           }
 
-          // Multiply by 100 and round to the nearest whole number
-          newPeakValue = Math.round(newPeakValue * 100);
-
-          // Update the peak value state
-          setPeakValue(newPeakValue);
+          // Convert amplitude to decibels
+          let referenceValue = 42;
+          const db = Math.max(0, Math.round(20 * Math.log10(peakValue) + referenceValue));
+          setPeakValue(db);
         };
+
+        // Start updating the peak value
+        const intervalId = setInterval(updatePeakValue, 100);
       })
       .catch((error) => {
         console.error('Error accessing microphone:', error);

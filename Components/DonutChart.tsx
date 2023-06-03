@@ -51,7 +51,7 @@ if (noteName != null) {
 
 const highlightedNoteIndex = chartData.findIndex((noteData) => noteData[0] === highlightedNote);
 if (highlightedNoteIndex !== -1) {
-  if (peakValue >= 1.5 && clarity >= 0.9) {
+  if (peakValue >= 1 && clarity >= 0.9) {
     chartOptions.colors[highlightedNoteIndex - 1] = 'SteelBlue';
   } else {
     chartOptions.colors[highlightedNoteIndex - 1] = 'lightblue';

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import '../style.css';
 
+import DonutChart from '../Components/DonutChart';
+
 import { useEffect, useState } from 'react';
 import { PitchDetector } from 'pitchy';
 
@@ -177,7 +179,11 @@ const Home = () => {
           <h1>Music Notes Visualizer</h1>
         </div>
         <br />
+        <DonutChart />
+        <br/>
         <p className="parameters_form">
+          <h3>Tuner Information</h3>
+          <br/>
           {peakValue} dB
           <br/>
           {frequencyValue} Hz

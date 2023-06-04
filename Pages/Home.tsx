@@ -156,6 +156,36 @@ const Home = () => {
     return noteName;
   }
 
+  const [recordedNotes, setRecordedNotes] = useState('');
+
+  const [recording, setRecording] = useState(false);
+
+  useEffect(() => {
+    // Call the record function whenever noteName changes
+    record(noteName);
+  }, [noteName]);
+
+  // Start recording function
+  function startRecording(){
+    setRecording(true);
+    console.log('Started recording...')
+  }
+
+  // Record function
+  function record(note){
+    if (recording) {
+    let previousNote = '';
+    
+      if (note != previousNote && peakValue >= 1 && clarity >= 0.9) {
+        if (recordedNotes == '')
+          setRecordedNotes(note);
+        else
+          setRecordedNotes(recordedNotes + ', ' + note);
+        previousNote = note;
+      } 
+    }
+  }
+
   // Begin HTML Template
   return (
     <div id="container">
@@ -181,7 +211,12 @@ const Home = () => {
         <NoteContext.Provider value={{ noteName, clarity, peakValue }}>
         <DonutChart />
         </NoteContext.Provider>
-        <br/> <br/>
+        <br/>
+        <div className='record' hidden>
+          <button onClick={startRecording}>Record</button>
+          {recordedNotes}
+        </div>
+        <br/>
         <div className="parameters_form">
           <h3>Tuner Information</h3>
           <p>

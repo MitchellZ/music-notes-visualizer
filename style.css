@@ -185,7 +185,7 @@ label {
   color: #0fb3eb;
 }
 
-.parameters_form button {
+.record button {
   padding: 10px;
   display: block;
   margin-top: 8px;
@@ -200,7 +200,7 @@ label {
   font-weight: bold;
 }
 
-.parameters_form button:hover {
+.record button:hover {
   background-color: #0d8fbb;
   color: white;
   border: 3px solid #0d8fbb;

@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Chart } from 'react-google-charts';
 
 import NoteContext from '../Contexts/NoteContext';
 
 const DonutChart = () => {
   const { noteName, clarity, peakValue } = useContext(NoteContext);
+  const [recordedNotes, setRecordedNotes] = useState('');
 
   //console.log('Peak ' + peakValue);
 
@@ -53,6 +54,7 @@ const highlightedNoteIndex = chartData.findIndex((noteData) => noteData[0] === h
 if (highlightedNoteIndex !== -1) {
   if (peakValue >= 1 && clarity >= 0.9) {
     chartOptions.colors[highlightedNoteIndex - 1] = 'SteelBlue';
+
   } else {
     chartOptions.colors[highlightedNoteIndex - 1] = 'lightblue';
   }

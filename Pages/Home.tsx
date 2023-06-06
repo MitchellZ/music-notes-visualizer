@@ -3,6 +3,7 @@ import '../style.css';
 
 import NoteContext from '../Contexts/NoteContext';
 import DonutChart from '../Components/DonutChart';
+import Controls from '../Components/Controls';
 
 import { useEffect, useState } from 'react';
 import { PitchDetector } from 'pitchy';
@@ -156,36 +157,6 @@ const Home = () => {
     return noteName;
   }
 
-  const [recordedNotes, setRecordedNotes] = useState('');
-
-  const [recording, setRecording] = useState(false);
-
-  useEffect(() => {
-    // Call the record function whenever noteName changes
-    record(noteName);
-  }, [noteName]);
-
-  // Start recording function
-  function startRecording(){
-    setRecording(true);
-    console.log('Started recording...')
-  }
-
-  // Record function
-  function record(note){
-    if (recording) {
-    let previousNote = '';
-    
-      if (note != previousNote && peakValue >= 1 && clarity >= 0.9) {
-        if (recordedNotes == '')
-          setRecordedNotes(note);
-        else
-          setRecordedNotes(recordedNotes + ', ' + note);
-        previousNote = note;
-      } 
-    }
-  }
-
   // Begin HTML Template
   return (
     <div id="container">
@@ -212,10 +183,7 @@ const Home = () => {
         <DonutChart />
         </NoteContext.Provider>
         <br/>
-        <div className='record' hidden>
-          <button onClick={startRecording}>Record</button>
-          {recordedNotes}
-        </div>
+        <Controls />
         <br/>
         <div className="parameters_form">
           <h3>Tuner Information</h3>

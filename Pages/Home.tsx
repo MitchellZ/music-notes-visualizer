@@ -12,7 +12,7 @@ import { PitchDetector } from 'pitchy';
 const Home = () => {
   const [peakValue, setPeakValue] = useState<number>(0);
 
-  // Function to indentify peak volume
+  // Function to indentify frequency at peak volume
   useEffect(() => {
     let audioContext: AudioContext | null = null;
     let analyserNode: AnalyserNode | null = null;
